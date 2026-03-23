@@ -9,7 +9,7 @@ export default function Layout({
   return (
     <ProtectedRoute>
       <DashboardLayout>
-        {children}
+        {children}``
       </DashboardLayout>
     </ProtectedRoute>
   );

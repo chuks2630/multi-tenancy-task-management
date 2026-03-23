@@ -1,0 +1,65 @@
+services:
+  # Laravel Backend
+  - type: web
+    name: myapp-backend
+    runtime: docker
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
+    plan: free
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_DEBUG
+        value: "false"
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        sync: false        # you'll paste this from Neon dashboard
+      - key: DB_PORT
+        value: "5432"
+      - key: DB_DATABASE
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_SSLMODE
+        value: require
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: myapp-redis
+          property: host
+      - key: REDIS_PASSWORD
+        fromService:
+          type: redis
+          name: myapp-redis
+          property: password
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: myapp-redis
+          property: port
+
+  # Next.js Frontend
+  - type: web
+    name: myapp-frontend
+    runtime: docker
+    dockerfilePath: frontend/Dockerfile
+    dockerContext: frontend
+    plan: free
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: myapp-backend
+          property: host
+          envVarKey: NEXT_PUBLIC_API_URL
+
+  # Redis (replaces your redis docker-compose service)
+  - type: redis
+    name: myapp-redis
+    plan: free
+    ipAllowList: []        # only allow internal render services
