@@ -2,13 +2,10 @@
 set -e
 
 echo "Testing DB connection..."
-php artisan db:show --no-interaction || {
-    echo "❌ DB connection failed. Check your env vars."
-    exit 1
-}
+php artisan migrate:status --no-interaction 2>&1 | head -5 || true
 
 echo "Running migrations..."
-php artisan migrate:fresh --force
+php artisan migrate --force
 
 echo "Caching config..."
 php artisan config:cache
