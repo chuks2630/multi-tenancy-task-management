@@ -2,7 +2,7 @@
 set -e
 
 echo "Running migrations..."
-php artisan migrate --force
+php artisan migrate:fresh --force
 
 echo "Caching config..."
 php artisan config:cache
