@@ -1,6 +1,12 @@
 #!/bin/sh
 set -e
 
+echo "Testing DB connection..."
+php artisan db:show --no-interaction || {
+    echo "❌ DB connection failed. Check your env vars."
+    exit 1
+}
+
 echo "Running migrations..."
 php artisan migrate:fresh --force
 
