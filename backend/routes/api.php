@@ -7,8 +7,7 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\WebhookController;
 
 // Stripe Webhooks (public endpoint)
-Route::post('/webhooks/stripe', [WebhookController::class, 'handleStripe'])
-    ->name('webhooks.stripe');
+Route::post('/webhooks/stripe', [WebhookController::class, 'handleStripe']);
 
 // Public API routes
 Route::prefix('v1')->group(function () {
