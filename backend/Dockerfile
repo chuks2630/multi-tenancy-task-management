@@ -1,6 +1,6 @@
 FROM php:8.3-fpm-alpine
 
-# Install system dependencies + PHP extensions including intl
+# Install system dependencies + PHP extensions including intl and redis
 RUN apk add --no-cache \
     nginx \
     postgresql-dev \
@@ -9,7 +9,9 @@ RUN apk add --no-cache \
     zip \
     unzip \
     curl \
-    $PHPIZE_DEPS \
+    autoconf \
+    g++ \
+    make \
     && docker-php-ext-install \
         pdo \
         pdo_pgsql \
@@ -17,7 +19,9 @@ RUN apk add --no-cache \
         intl \
         zip \
     && pecl install redis \
-    && docker-php-ext-enable redis
+    && docker-php-ext-enable redis \
+    && apk del autoconf g++ make
+
 WORKDIR /var/www/html
 COPY . .
 
