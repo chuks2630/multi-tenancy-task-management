@@ -9,13 +9,15 @@ RUN apk add --no-cache \
     zip \
     unzip \
     curl \
+    $PHPIZE_DEPS \
     && docker-php-ext-install \
         pdo \
         pdo_pgsql \
         opcache \
         intl \
-        zip
-
+        zip \
+    && pecl install redis \
+    && docker-php-ext-enable redis
 WORKDIR /var/www/html
 COPY . .
 

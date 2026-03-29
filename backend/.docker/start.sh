@@ -6,6 +6,7 @@ php artisan migrate:status --no-interaction 2>&1 | head -5 || true
 
 echo "Running migrations..."
 php artisan migrate --force
+php artisan db:seed --class=PlanSeeder --force
 
 echo "Caching config..."
 php artisan config:cache
