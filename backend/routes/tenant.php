@@ -53,7 +53,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Teams
     // Apply feature + permission middleware only to the store action
-    Route::apiResource('teams', TeamController::class);
+    // Route::apiResource('teams', TeamController::class);
+    Route::get('teams', [TeamController::class, 'index']);
+    Route::get('teams/{team}', [TeamController::class, 'show']);
+    Route::put('teams/{team}', [TeamController::class, 'update']);
+    Route::delete('teams/{team}', [TeamController::class, 'destroy']);
     Route::middleware(['feature.limit:max_teams', 'permission:create teams'])
         ->group(function () {
             Route::post('teams', [TeamController::class, 'store'])->name('teams.store.limited');
