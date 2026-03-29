@@ -60,7 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('teams/{team}', [TeamController::class, 'destroy']);
     Route::middleware(['feature.limit:max_teams', 'permission:create teams'])
         ->group(function () {
-            Route::post('teams', [TeamController::class, 'store'])->name('teams.store.limited');
+            Route::post('teams', [TeamController::class, 'store']);
         });
 
     Route::prefix('teams/{team}')->group(function () {
@@ -81,10 +81,14 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // Boards
-    Route::apiResource('boards', BoardController::class);
+    // Route::apiResource('boards', BoardController::class);
+    Route::get('boards', [BoardController::class, 'index']);
+    Route::get('boards/{board}', [BoardController::class, 'show']);
+    Route::put('boards/{board}', [BoardController::class, 'update']);
+    Route::delete('boards/{board}', [BoardController::class, 'destroy']);
     Route::middleware(['feature.limit:max_boards', 'permission:create boards'])
         ->group(function () {
-            Route::post('boards', [BoardController::class, 'store'])->name('boards.store.limited');
+            Route::post('boards', [BoardController::class, 'store']);
         });
 
     Route::prefix('boards/{board}')->group(function () {
@@ -94,10 +98,14 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // Tasks
-    Route::apiResource('tasks', TaskController::class);
+    // Route::apiResource('tasks', TaskController::class);
+    Route::get('tasks', [TaskController::class, 'index']);
+    Route::get('tasks/{task}', [TaskController::class, 'show']);
+    Route::put('tasks/{task}', [TaskController::class, 'update']);
+    Route::delete('tasks/{task}', [TaskController::class, 'destroy']);
     Route::middleware(['feature.limit:max_tasks', 'permission:create tasks'])
         ->group(function () {
-            Route::post('tasks', [TaskController::class, 'store'])->name('tasks.store.limited');
+            Route::post('tasks', [TaskController::class, 'store']);
         });
 
     Route::prefix('tasks')->group(function () {
