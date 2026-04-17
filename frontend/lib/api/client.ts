@@ -60,7 +60,7 @@ apiClient.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error: AxiosError<any>) => {
+  (error: AxiosError<{ message?: string; errors?: Record<string, string[]> }>) => {
     // Handle 401 Unauthorized
     if (error.response?.status === 401) {
       localStorage.removeItem('auth_token');

@@ -28,8 +28,8 @@ export const tasksApi = {
     description?: string;
     status?: 'todo' | 'in_progress' | 'done';
     priority?: 'low' | 'medium' | 'high' | 'urgent';
-    assigned_to?: number;
-    due_date?: string;
+    assigned_to?: number | null;
+    due_date?: string | null;
   }): Promise<Task> => {
     const response = await apiClient.post<ApiResponse<Task>>('/tasks', data);
     return response.data.data!;

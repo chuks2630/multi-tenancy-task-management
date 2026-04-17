@@ -42,7 +42,7 @@ export const boardsApi = {
   },
 
   // Get board statistics
-  getStatistics: async (id: number): Promise<any> => {
+  getStatistics: async (id: number): Promise<unknown> => {
     const response = await apiClient.get<ApiResponse>(`/boards/${id}/statistics`);
     return response.data.data;
   },

@@ -87,8 +87,8 @@ function AnalyticsContent() {
       document.body.removeChild(a);
 
       toast.success(`Analytics exported as ${format.toUpperCase()}`);
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to export analytics');
+    } catch (error: unknown) {
+      toast.error((error instanceof Error ? error.message : null) || 'Failed to export analytics');
     } finally {
       setIsExporting(false);
     }
@@ -101,7 +101,7 @@ function AnalyticsContent() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Analytics</h1>
           <p className="text-muted-foreground mt-2">
-            Track your team's performance and productivity
+            Track your team&apos;s performance and productivity
           </p>
         </div>
         <div className="flex items-center gap-2">

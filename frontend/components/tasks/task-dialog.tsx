@@ -56,7 +56,7 @@ export function TaskDialog({
     resolver: zodResolver(createTaskSchema),
     defaultValues: {
       board_id: boardId,
-      status: defaultStatus as any,
+      status: defaultStatus as CreateTaskFormData['status'],
       priority: 'medium',
     },
   });
@@ -80,7 +80,7 @@ export function TaskDialog({
         board_id: boardId,
         title: '',
         description: '',
-        status: defaultStatus as any,
+        status: defaultStatus as CreateTaskFormData['status'],
         priority: 'medium',
       });
     }
@@ -131,7 +131,7 @@ export function TaskDialog({
               <Label htmlFor="status">Status</Label>
               <Select
                 value={status}
-                onValueChange={(value) => setValue('status', value as any)}
+                onValueChange={(value) => setValue('status', value as CreateTaskFormData['status'])}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -148,7 +148,7 @@ export function TaskDialog({
               <Label htmlFor="priority">Priority</Label>
               <Select
                 value={priority}
-                onValueChange={(value) => setValue('priority', value as any)}
+                onValueChange={(value) => setValue('priority', value as CreateTaskFormData['priority'])}
               >
                 <SelectTrigger>
                   <SelectValue />

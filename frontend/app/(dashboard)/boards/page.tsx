@@ -48,7 +48,7 @@ export default function BoardsPage() {
       setDialogOpen(false);
       toast.success('Board created successfully');
     },
-    onError: (error: any) => {
+    onError: (error: Error & { response?: { status?: number } }) => {
       if (error.response?.status === 403) {
         toast.error('You have reached your plan limit for boards');
       } else {
@@ -67,7 +67,7 @@ export default function BoardsPage() {
       setSelectedBoard(null);
       toast.success('Board updated successfully');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message || 'Failed to update board');
     },
   });
@@ -79,7 +79,7 @@ export default function BoardsPage() {
       queryClient.invalidateQueries({ queryKey: ['boards'] });
       toast.success('Board deleted successfully');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message || 'Failed to delete board');
     },
   });

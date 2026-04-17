@@ -24,7 +24,7 @@ import { TaskCard } from '@/components/tasks/task-card';
 import { TaskDialog } from '@/components/tasks/task-dialog';
 import { boardsApi } from '@/lib/api/boards';
 import { tasksApi } from '@/lib/api/tasks';
-import { Task, TaskStatus } from '@/lib/types';
+import { Task, TaskStatus, PaginatedResponse } from '@/lib/types';
 import { CreateTaskFormData } from '@/lib/validations/task';
 import { ReadOnlyBanner } from '@/components/ui/read-only-banner';
 
@@ -69,7 +69,7 @@ export default function BoardPage() {
       setTaskDialogOpen(false);
       toast.success('Task created successfully');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message || 'Failed to create task');
     },
   });
@@ -85,7 +85,7 @@ export default function BoardPage() {
       setSelectedTask(null);
       toast.success('Task updated successfully');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message || 'Failed to update task');
     },
   });
@@ -98,7 +98,7 @@ export default function BoardPage() {
       queryClient.invalidateQueries({ queryKey: ['boards', boardId] });
       toast.success('Task deleted successfully');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message || 'Failed to delete task');
     },
   });
@@ -110,7 +110,7 @@ export default function BoardPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks', boardId] });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message || 'Failed to update task positions');
       queryClient.invalidateQueries({ queryKey: ['tasks', boardId] });
     },
@@ -150,7 +150,7 @@ export default function BoardPage() {
 
     if (activeStatus !== overStatus) {
       // Update task status immediately (optimistic update)
-      queryClient.setQueryData(['tasks', boardId], (old: any) => {
+      queryClient.setQueryData(['tasks', boardId], (old: PaginatedResponse<Task> | undefined) => {
         if (!old) return old;
         return {
           ...old,

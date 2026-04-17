@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, startTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { usePermissions } from '@/lib/hooks/use-permissions';
@@ -48,16 +48,14 @@ export function PermissionGuard({
     if (!allowed) {
       console.warn('Permission denied:', { permission, role, user: user?.role });
       toast.error('You do not have permission to access this page');
-      
-      // Mark as checked to prevent multiple redirects
-      setHasChecked(true);
-      
-      // Small delay to prevent immediate loop
+
+      startTransition(() => setHasChecked(true));
+
       setTimeout(() => {
         router.replace(fallbackUrl);
       }, 100);
     } else {
-      setHasChecked(true);
+      startTransition(() => setHasChecked(true));
     }
   }, [permission, role, hasPermission, hasAnyPermission, hasRole, router, fallbackUrl, isLoading, hasChecked, user]);
 

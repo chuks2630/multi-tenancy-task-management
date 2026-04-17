@@ -49,7 +49,7 @@ export function UsageStatsDisplay({ usage }: UsageStatsProps) {
           <Alert>
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              You've reached the limit on some features. Upgrade your plan to continue.
+              You&apos;ve reached the limit on some features. Upgrade your plan to continue.
             </AlertDescription>
           </Alert>
         )}

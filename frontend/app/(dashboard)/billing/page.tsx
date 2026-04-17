@@ -45,7 +45,7 @@ export default function BillingPage() {
     onSuccess: (data) => {
       window.location.href = data.url;
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message || 'Failed to create checkout session');
     },
   });
@@ -56,7 +56,7 @@ export default function BillingPage() {
     onSuccess: (data) => {
       window.open(data.url, '_blank');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message || 'Failed to open billing portal');
     },
   });

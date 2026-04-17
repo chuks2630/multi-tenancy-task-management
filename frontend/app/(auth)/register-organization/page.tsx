@@ -94,8 +94,9 @@ export default function RegisterOrganizationPage() {
         window.location.href = tenantUrl;
       }, 1000);
       
-    } catch (err: any) {
-      setError(err.response?.data?.message || err.message || 'Failed to create organization');
+    } catch (err: unknown) {
+      const axiosErr = err as { response?: { data?: { message?: string } }; message?: string };
+      setError(axiosErr.response?.data?.message || axiosErr.message || 'Failed to create organization');
       toast.error('Organization creation failed');
     } finally {
       setIsLoading(false);
@@ -185,7 +186,7 @@ export default function RegisterOrganizationPage() {
                 )}
                 
                 <p className="text-xs text-muted-foreground">
-                  This will be your organization's URL: http://{subdomain || 'your-subdomain'}.localhost:3000
+                  This will be your organization&apos;s URL: http://{subdomain || 'your-subdomain'}.localhost:3000
                 </p>
               </div>
             </div>

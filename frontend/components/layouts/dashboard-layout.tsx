@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth } from '@/lib/auth/auth-context';
 import { Header } from './header';
 import { Sidebar } from './sidebar';
@@ -15,19 +15,15 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     useKeyboardShortcuts();
   const { user } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [tenantName, setTenantName] = useState<string>('');
-
-  useEffect(() => {
-    // Get tenant name from subdomain or API
+  const [tenantName] = useState<string>(() => {
     if (typeof window !== 'undefined') {
-      const hostname = window.location.hostname;
-      const parts = hostname.split('.');
-      
+      const parts = window.location.hostname.split('.');
       if (parts.length > 1 && parts[0] !== 'localhost') {
-        setTenantName(parts[0].charAt(0).toUpperCase() + parts[0].slice(1));
+        return parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
       }
     }
-  }, []);
+    return '';
+  });
 
   return (
     <div className="flex h-screen overflow-hidden">

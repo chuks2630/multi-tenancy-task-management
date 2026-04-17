@@ -4,7 +4,7 @@ import { useAuth } from '@/lib/auth/auth-context';
 import { Permission } from '@/lib/types';
 
 export function usePermissions() {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
 
   const hasPermission = (permission: Permission): boolean => {
     if (!user) return false;
@@ -52,5 +52,6 @@ export function usePermissions() {
     isAdmin,
     canManage,
     user,
+    isLoading,
   };
 }

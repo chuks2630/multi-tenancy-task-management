@@ -24,34 +24,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load user from localStorage on mount
-  useEffect(() => {
-    const loadUser = async () => {
-      setIsLoading(true);
-      
-      const storedToken = localStorage.getItem('auth_token');
-      const storedUser = localStorage.getItem('user');
-
-      if (storedToken && storedUser) {
-        setToken(storedToken);
-        setUser(JSON.parse(storedUser));
-        
-        // Fetch fresh user data with permissions
-        try {
-          await refreshUserData();
-        } catch (error) {
-          console.error('Failed to refresh user data:', error);
-          // If refresh fails, clear everything
-          handleLogout();
-        }
-      }
-
-      setIsLoading(false);
-    };
-
-    loadUser();
-  }, []);
-
   // Refresh user data from server
   const refreshUserData = async () => {
     try {
@@ -64,35 +36,56 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const handleLogout = () => {
+    console.log('Logging out...');
+    setUser(null);
+    setToken(null);
+    clearAuthData();
+    console.log('Logout complete');
+  };
+
+  // Load user from localStorage on mount
+  useEffect(() => {
+    const loadUser = async () => {
+      setIsLoading(true);
+
+      const storedToken = localStorage.getItem('auth_token');
+      const storedUser = localStorage.getItem('user');
+
+      if (storedToken && storedUser) {
+        setToken(storedToken);
+        setUser(JSON.parse(storedUser));
+
+        // Fetch fresh user data with permissions
+        try {
+          await refreshUserData();
+        } catch (error) {
+          console.error('Failed to refresh user data:', error);
+          handleLogout();
+        }
+      }
+
+      setIsLoading(false);
+    };
+
+    loadUser();
+  }, []);
+
   // Login function
   const login = async (credentials: LoginCredentials) => {
     const response = await apiClient.post<AuthResponse>('/auth/login', credentials);
-    
+
     const { user, token } = response.data.data;
-    
+
     setUser(user);
     setToken(token);
-    
+
     localStorage.setItem('auth_token', token);
     localStorage.setItem('user', JSON.stringify(user));
-    
+
     // Fetch fresh user data with permissions
     await refreshUserData();
   };
-
-  // ✅ Fixed logout function
-  const handleLogout = () => {
-  console.log('Logging out...');
-  
-  // Clear state
-  setUser(null);
-  setToken(null);
-  
-  // Clear all storage
-  clearAuthData();
-  
-  console.log('Logout complete');
-};
 
   return (
     <AuthContext.Provider

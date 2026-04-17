@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { UserPlus, MoreVertical, Shield, Mail, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
@@ -56,37 +56,10 @@ const roleColors = {
 };
 
 export default function AdminUsersPage() {
- 
+
   const queryClient = useQueryClient();
- const { user: currentUser, hasPermission } = usePermissions();
+  const { user: currentUser, hasPermission } = usePermissions();
   const [selectedRole, setSelectedRole] = useState<string>('all');
-
-  //
-// useEffect(() => {
-//   console.log('Current user:', currentUser);
-//   console.log('User role:', currentUser?.role);
-//   console.log('User permissions:', currentUser?.permissions);
-//   console.log('Has manage settings:', hasPermission('manage settings'));
-// }, [currentUser, hasPermission]);
-
-//
-  const hasManagePermission = hasPermission('manage settings');
-  if (!hasManagePermission) {
-    return (
-      <div className="flex h-full items-center justify-center p-6">
-        <Alert variant="destructive" className="max-w-md">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Access Denied</AlertTitle>
-          <AlertDescription>
-            You don't have permission to access this page. Only owners and administrators can manage users.
-          </AlertDescription>
-          <Button asChild className="mt-4">
-            <Link href="/dashboard">Go to Dashboard</Link>
-          </Button>
-        </Alert>
-      </div>
-    );
-  }
 
   // Fetch users
   const { data: usersData, isLoading } = useQuery({
@@ -110,7 +83,7 @@ export default function AdminUsersPage() {
       queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
       toast.success('User role updated successfully');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message || 'Failed to update user role');
     },
   });
@@ -125,10 +98,28 @@ export default function AdminUsersPage() {
       queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
       toast.success('User deactivated successfully');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message || 'Failed to deactivate user');
     },
   });
+
+  const hasManagePermission = hasPermission('manage settings');
+  if (!hasManagePermission) {
+    return (
+      <div className="flex h-full items-center justify-center p-6">
+        <Alert variant="destructive" className="max-w-md">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Access Denied</AlertTitle>
+          <AlertDescription>
+            You don&apos;t have permission to access this page. Only owners and administrators can manage users.
+          </AlertDescription>
+          <Button asChild className="mt-4">
+            <Link href="/dashboard">Go to Dashboard</Link>
+          </Button>
+        </Alert>
+      </div>
+    );
+  }
 
   const handleRoleChange = (userId: number, newRole: string) => {
     if (confirm(`Are you sure you want to change this user's role to ${newRole}?`)) {
@@ -315,12 +306,6 @@ export default function AdminUsersPage() {
                           </Badge>
                         )}
                       </Can>
-                      <Can permission="manage settings" fallback={
-                        <Badge className={roleColors[user.role as keyof typeof roleColors]}>
-                          {user.role === 'owner' && <Shield className="h-3 w-3 mr-1" />}
-                          {user.role}
-                        </Badge>
-                      } />
                     </TableCell>
                     <TableCell>
                       <Badge variant={user.is_active ? 'default' : 'secondary'}>

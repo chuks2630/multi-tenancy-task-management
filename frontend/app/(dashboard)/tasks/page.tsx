@@ -79,7 +79,7 @@ export default function TasksPage() {
       setDialogOpen(false);
       toast.success('Task created successfully');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message || 'Failed to create task');
     },
   });
@@ -94,7 +94,7 @@ export default function TasksPage() {
       setSelectedTask(null);
       toast.success('Task updated successfully');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message || 'Failed to update task');
     },
   });
@@ -106,7 +106,7 @@ export default function TasksPage() {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
       toast.success('Task deleted successfully');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message || 'Failed to delete task');
     },
   });

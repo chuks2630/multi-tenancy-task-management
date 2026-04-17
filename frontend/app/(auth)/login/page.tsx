@@ -56,9 +56,10 @@ export default function LoginPage() {
       
       // Use replace to prevent back button issues
       router.replace(redirectPath);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Login error:', error);
-      toast.error(error.response?.data?.message || 'Invalid credentials');
+      const axiosError = error as { response?: { data?: { message?: string } } };
+      toast.error(axiosError.response?.data?.message || 'Invalid credentials');
     } finally {
       setIsLoading(false);
     }
@@ -132,7 +133,7 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-4 text-center text-sm">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/register" className="text-primary hover:underline">
               Sign up
             </Link>

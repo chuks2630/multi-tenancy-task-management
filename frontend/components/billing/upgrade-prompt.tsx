@@ -34,7 +34,7 @@ export function UpgradePrompt({ feature, currentLimit, dismissible = true }: Upg
       </AlertTitle>
       <AlertDescription className="text-orange-800">
         <p className="mb-3">
-          You've reached your plan limit of {currentLimit} {feature}. 
+          You&apos;ve reached your plan limit of {currentLimit} {feature}.
           Upgrade to continue creating more.
         </p>
         <Button
